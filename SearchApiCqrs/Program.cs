@@ -1,4 +1,5 @@
 using DataGrid.Persistence;
+using DataGrid.Application;
 namespace SearchApiCqrs
 {
     public class Program
@@ -9,6 +10,7 @@ namespace SearchApiCqrs
 
             // Add services to the container.
             builder.Services.AddPersistence(builder.Configuration);
+            builder.Services.AddApplicationServices();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

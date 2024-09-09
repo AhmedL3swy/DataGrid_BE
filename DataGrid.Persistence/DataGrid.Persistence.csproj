@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\DataGrid.Application\DataGrid.Application.csproj" />
     <ProjectReference Include="..\DataGrid.Domain\DataGrid.Domain.csproj" />
   </ItemGroup>
