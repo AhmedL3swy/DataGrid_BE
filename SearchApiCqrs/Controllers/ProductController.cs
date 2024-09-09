@@ -20,7 +20,7 @@ namespace DataGrid.Api.Controllers
         public async Task<ActionResult<List<SearchProductViewModel>>> Search(
            string? searchValue,
            string? sortBy,
-           string? sortDirection,
+           SortDirection sortDirection,
            int pageNumber = 1,
            int pageSize = 10)
         {

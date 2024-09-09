@@ -22,24 +22,24 @@ namespace DataGrid.Persistence.Repositories
         }
         public async Task<List<Product>> SearchAsync(SearchProductQuery query)
         {
-            // Start the query
+            // init Query
             IQueryable<Product> products = _context.Products;
 
-            // Apply search filter
+            //  search 
             if (!string.IsNullOrEmpty(query.SearchValue))
             {
-                products = products.Where(p => p.Name.Contains(query.SearchValue) || p.Description.Contains(query.SearchValue));
+                products = products.Where(p => p.Name.Contains(query.SearchValue));
             }
 
-            // Apply sorting
+            // sort 
             if (!string.IsNullOrEmpty(query.SortBy))
             {
-                products = query.SortDirection == "desc"
+                products = query.SortDirection == SortDirection.Descending
                     ? products.OrderByDescending(p => EF.Property<object>(p, query.SortBy))
                     : products.OrderBy(p => EF.Property<object>(p, query.SortBy));
             }
 
-            // Apply pagination
+            // paging
             products = products
                 .Skip((query.PageNumber - 1) * query.PageSize)
                 .Take(query.PageSize);
