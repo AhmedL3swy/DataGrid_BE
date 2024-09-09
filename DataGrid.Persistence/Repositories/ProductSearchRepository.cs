@@ -25,27 +25,37 @@ namespace DataGrid.Persistence.Repositories
             // init Query
             IQueryable<Product> products = _context.Products;
 
-            //  search 
-            if (!string.IsNullOrEmpty(query.SearchValue))
+            // Search
+            if (query.Search != null && query.Search.Any())
             {
-                products = products.Where(p => p.Name.Contains(query.SearchValue));
+                foreach (var searchObject in query.Search)
+                {
+                    if (searchObject.Value != null)
+                    {
+                        var propertyType = typeof(Product).GetProperty(searchObject.Key)?.PropertyType;
+                        products = products.SortByPropertyTypeAndValue(propertyType, searchObject.Key, searchObject.Value);
+                    }
+                }
             }
 
             // sort 
-            if (!string.IsNullOrEmpty(query.SortBy))
+            if (query.Sort != null && query.Sort.Any())
             {
-                products = query.SortDirection == SortDirection.Descending
-                    ? products.OrderByDescending(p => EF.Property<object>(p, query.SortBy))
-                    : products.OrderBy(p => EF.Property<object>(p, query.SortBy));
+                foreach (var sortObject in query.Sort)
+                {
+                    products = products.OrderBy(p => EF.Property<string>(p, sortObject.Name));
+                }
             }
+
 
             // paging
             products = products
                 .Skip((query.PageNumber - 1) * query.PageSize)
                 .Take(query.PageSize);
-
+            // Excute the Query!!
             return await products.ToListAsync();
         }
+
     }
 }
 

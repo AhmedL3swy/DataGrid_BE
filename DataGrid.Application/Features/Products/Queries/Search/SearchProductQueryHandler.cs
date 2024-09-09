@@ -25,9 +25,17 @@ namespace DataGrid.Application.Features.Products.Queries.Search
             var products = await _searchRepository.SearchAsync(request);
             var count = products.Count();
             var searchProductViewModel = _mapper.Map<List<SearchProductViewModel>>(products);
+            var searchProductQueryResult = new SearchProductQueryResult
+            {
+                Data = searchProductViewModel,
+                Total = count,
+                PageIndex = request.PageNumber,
+                PageSize = request.PageSize
+            };
+
             return searchProductViewModel;
         }
 
-       
+
     }
 }

@@ -16,15 +16,9 @@ namespace DataGrid.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<SearchProductViewModel>>> Search(
-           string? searchValue,
-           string? sortBy,
-           SortDirection sortDirection,
-           int pageNumber = 1,
-           int pageSize = 10)
+        [HttpPost]
+        public async Task<ActionResult<List<SearchProductViewModel>>> Search(SearchProductQuery query)
         {
-            var query = new SearchProductQuery(searchValue, sortBy, sortDirection, pageNumber, pageSize);
             var result = await _mediator.Send(query);
             return Ok(result);
         }
