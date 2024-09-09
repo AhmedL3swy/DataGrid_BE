@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DataGrid.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -17,10 +17,17 @@ namespace DataGrid.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<SearchProductViewModel>>> Search()
+        public async Task<ActionResult<List<SearchProductViewModel>>> Search(
+           string? searchValue,
+           string? sortBy,
+           string? sortDirection,
+           int pageNumber = 1,
+           int pageSize = 10)
         {
-            var result = await _mediator.Send(new SearchProductQuery());
+            var query = new SearchProductQuery(searchValue, sortBy, sortDirection, pageNumber, pageSize);
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataGrid.Application.Features.Products.Queries.Search;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace DataGrid.Application.Contracts
 {
     public interface ISearchRepository<T> where T : class
     {
-        Task<List<T>> SearchAsync();
+        Task<List<T>> SearchAsync(SearchProductQuery query);
     }
 }

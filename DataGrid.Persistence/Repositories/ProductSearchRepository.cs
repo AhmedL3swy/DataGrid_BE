@@ -1,4 +1,5 @@
 ﻿using DataGrid.Application.Contracts;
+using DataGrid.Application.Features.Products.Queries.Search;
 using DataGrid.Domain;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -19,9 +20,32 @@ namespace DataGrid.Persistence.Repositories
         {
             _context = context;
         }
-        public async Task<List<Product>> SearchAsync()
+        public async Task<List<Product>> SearchAsync(SearchProductQuery query)
         {
-            return await _context.Products.ToListAsync();
+            // Start the query
+            IQueryable<Product> products = _context.Products;
+
+            // Apply search filter
+            if (!string.IsNullOrEmpty(query.SearchValue))
+            {
+                products = products.Where(p => p.Name.Contains(query.SearchValue) || p.Description.Contains(query.SearchValue));
+            }
+
+            // Apply sorting
+            if (!string.IsNullOrEmpty(query.SortBy))
+            {
+                products = query.SortDirection == "desc"
+                    ? products.OrderByDescending(p => EF.Property<object>(p, query.SortBy))
+                    : products.OrderBy(p => EF.Property<object>(p, query.SortBy));
+            }
+
+            // Apply pagination
+            products = products
+                .Skip((query.PageNumber - 1) * query.PageSize)
+                .Take(query.PageSize);
+
+            return await products.ToListAsync();
         }
     }
 }
+

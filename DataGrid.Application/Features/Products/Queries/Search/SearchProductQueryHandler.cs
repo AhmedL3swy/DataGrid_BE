@@ -22,7 +22,8 @@ namespace DataGrid.Application.Features.Products.Queries.Search
         }
         public async Task<List<SearchProductViewModel>> Handle(SearchProductQuery request, CancellationToken cancellationToken)
         {
-            var products = await _searchRepository.SearchAsync();
+            var products = await _searchRepository.SearchAsync(request);
+            var count = products.Count();
             var searchProductViewModel = _mapper.Map<List<SearchProductViewModel>>(products);
             return searchProductViewModel;
         }
