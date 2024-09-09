@@ -1,4 +1,5 @@
-﻿using DataGrid.Domain;
+﻿using DataGrid.Application.Features.Products.Queries.Search;
+using DataGrid.Domain;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace DataGrid.Persistence.Repositories
 {
     public static class QueryExtensions
     {
-        public static IQueryable<Product> SortByPropertyTypeAndValue(this IQueryable<Product> products, Type propertyType, string key, object value)
+        public static IQueryable<Product> SearchPropertyTypeAndValue(this IQueryable<Product> products, Type propertyType, string key, object value)
         {
             if (propertyType == typeof(string))
             {
@@ -25,5 +26,18 @@ namespace DataGrid.Persistence.Repositories
             }
             return products;
         }
+        public static IQueryable<Product> OrderByProperty(this IQueryable<Product> products, string propertyName, SortDirection sortDirection)
+        {
+            if (sortDirection == SortDirection.Ascending)
+            {
+                return products.OrderBy(p => EF.Property<string>(p, propertyName));
+            }
+            else
+            {
+                return products.OrderByDescending(p => EF.Property<string>(p, propertyName));
+            }
+        }
+
     }
+
 }

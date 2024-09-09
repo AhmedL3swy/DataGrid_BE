@@ -33,7 +33,7 @@ namespace DataGrid.Persistence.Repositories
                     if (searchObject.Value != null)
                     {
                         var propertyType = typeof(Product).GetProperty(searchObject.Key)?.PropertyType;
-                        products = products.SortByPropertyTypeAndValue(propertyType, searchObject.Key, searchObject.Value);
+                        products = products.SearchPropertyTypeAndValue(propertyType, searchObject.Key, searchObject.Value);
                     }
                 }
             }
@@ -43,7 +43,7 @@ namespace DataGrid.Persistence.Repositories
             {
                 foreach (var sortObject in query.Sort)
                 {
-                    products = products.OrderBy(p => EF.Property<string>(p, sortObject.Name));
+                    products = products.OrderByProperty(sortObject.Key, sortObject.Value);
                 }
             }
 
