@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DataGrid.Persistence.Repositories
 {
-    internal class ProductSearchRepository : ISearchRepository<Product>
+    internal class ProductSearchRepository<T, S> : ISearchRepository<T, S> where T : class where S : class
     {
         private readonly ProductDbContext _context;
         public ProductSearchRepository(
@@ -22,10 +22,10 @@ namespace DataGrid.Persistence.Repositories
         {
             _context = context;
         }
-        public async Task<List<Product>> SearchAsync(SearchQuery<SearchProductViewModel> query)
+        public async Task<List<T>> SearchAsync(SearchQuery<S> query)
         {
             // init Query
-            IQueryable<Product> products = _context.Products;
+            IQueryable<T> products = _context.Set<T>();
 
             // Search
             if (query.Search != null)
@@ -38,7 +38,7 @@ namespace DataGrid.Persistence.Repositories
             // sort 
             if (query.SortBy != null && !string.IsNullOrEmpty(query.SortBy))
             {
-                var sortProperty = typeof(Product).GetProperty(query.SortBy);
+                var sortProperty = typeof(T).GetProperty(query.SortBy);
                 if (sortProperty != null)
                 {
                     products = products.Sort(query.SortBy, query.SortDirection);

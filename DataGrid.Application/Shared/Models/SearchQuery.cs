@@ -9,10 +9,12 @@ using System.Threading.Tasks;
 
 namespace DataGrid.Application.Shared
 {
-    public class SearchQuery<T> : IRequest<ApiResult<T>> where T : class
+    public class SearchQuery<S> : IRequest<ApiResult<S>> where S : class
     {
-        private string sortBy = "Id";
-        public T Search { get; set; }
+        public S Search { get; set; }
+
+        private string sortBy = null;
+
         public string SortBy
         {
             get => sortBy;

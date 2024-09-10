@@ -13,7 +13,7 @@ namespace DataGrid.Persistence.Repositories
 {
     public static class SearchExtensions
     {
-        public static IQueryable<T> Search<T>(this IQueryable<T> entities, SearchProductViewModel searchObj, IEnumerable<PropertyInfo> searchProperties)
+        public static IQueryable<T> Search<T,S>(this IQueryable<T> entities, S searchObj, IEnumerable<PropertyInfo> searchProperties)
         {
             foreach (var property in searchProperties)
             {
@@ -103,5 +103,11 @@ namespace DataGrid.Persistence.Repositories
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize);
         }
+
+        public static IQueryable<T> Include<T>(this IQueryable<T> entities, string navigationProperty)
+        {
+            return entities.Include(navigationProperty);
+        }
+
     }
 }

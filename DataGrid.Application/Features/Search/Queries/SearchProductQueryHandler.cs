@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace DataGrid.Application.Features.Search.Queries
 {
-    public class SearchQueryHandler : IRequestHandler<SearchQuery<SearchProductViewModel>, ApiResult<SearchProductViewModel>>
+    public class SearchQueryHandler: IRequestHandler<SearchQuery<SearchProductViewModel>, ApiResult<SearchProductViewModel>>
     {
-        private readonly ISearchRepository<Product> _searchRepository;
+        private readonly ISearchRepository<Product, SearchProductViewModel> _searchRepository;
         private readonly IMapper _mapper;
 
-        public SearchQueryHandler(ISearchRepository<Product> searchRepository, IMapper mapper)
+        public SearchQueryHandler(ISearchRepository<Product, SearchProductViewModel> searchRepository, IMapper mapper)
         {
             _searchRepository = searchRepository;
             _mapper = mapper;

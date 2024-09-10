@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace DataGrid.Application.Contracts
 {
-    public interface ISearchRepository<T> where T : class
+    public interface ISearchRepository<T, S> where T : class where S : class
     {
-        Task<List<T>> SearchAsync(SearchQuery<SearchProductViewModel> query);
+        Task<List<T>> SearchAsync(SearchQuery<S> query);
     }
 }
