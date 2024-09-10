@@ -1,4 +1,5 @@
-﻿using DataGrid.Application.Features.Products.Queries.Search;
+﻿using DataGrid.Application.Features.Search.Queries;
+using DataGrid.Application.Shared.Models;
 using DataGrid.Domain;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -90,10 +91,15 @@ namespace DataGrid.Persistence.Repositories
                 return products.OrderByDescending(p => EF.Property<string>(p, propertyName));
             }
         }
+        public static IQueryable<Product> Sort(this IQueryable<Product> products, SortObject sortObject)
+        {
+            return products.OrderByProperty(sortObject.Field, sortObject.Direction);
+        }
+        public static IQueryable<Product> Paging(this IQueryable<Product> products, int pageNumber, int pageSize)
+        {
+            return products
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize);
+        }
     }
-
-
-   
-
-
 }

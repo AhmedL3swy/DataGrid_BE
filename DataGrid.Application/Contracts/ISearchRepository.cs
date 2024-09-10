@@ -1,4 +1,4 @@
-﻿using DataGrid.Application.Features.Products.Queries.Search;
+﻿using DataGrid.Application.Features.Search.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;

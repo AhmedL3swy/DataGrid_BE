@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataGrid.Application.Features.Products.Queries.Search
+namespace DataGrid.Application.Shared.Models
 {
-    public class SearchProductQueryResult
+    public class ApiResult<T> where T : class
     {
-        public List<SearchProductViewModel> Data { get; set; }
+        public List<T> Data { get; set; }
         public int Total { get; set; }
 
         public int PageIndex { get; set; }

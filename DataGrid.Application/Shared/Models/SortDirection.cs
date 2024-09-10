@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataGrid.Application.Features.Products.Queries.Search
+namespace DataGrid.Application.Shared.Models
 {
     public enum SortDirection
     {

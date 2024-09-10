@@ -1,5 +1,5 @@
 ﻿using DataGrid.Application.Contracts;
-using DataGrid.Application.Features.Products.Queries.Search;
+using DataGrid.Application.Features.Search.Queries;
 using DataGrid.Domain;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -34,19 +34,19 @@ namespace DataGrid.Persistence.Repositories
                 products = products.Search(query.Search, searchProperties);
             }
 
-            //// sort 
-            //if (query.Sort != null && query.Sort.Any())
-            //{
-            //    foreach (var sortObject in query.Sort)
-            //    {
-            //        products = products.OrderByProperty(sortObject.Key, sortObject.Value);
-            //    }
-            //}
+            // sort 
+            if (query.Sort != null && !string.IsNullOrEmpty(query.Sort.Field))
+            {
+                var sortProperty = typeof(Product).GetProperty(query.Sort.Field);
+                if (sortProperty != null)
+                {
+                    products = products.Sort(query.Sort);
+                }
+            }
 
             // paging
-            products = products
-                .Skip((query.PageNumber - 1) * query.PageSize)
-                .Take(query.PageSize);
+            products = products.Paging(query.PageNumber, query.PageSize);
+
             // Execute the Query!!
             return await products.ToListAsync();
         }
@@ -54,7 +54,7 @@ namespace DataGrid.Persistence.Repositories
     }
 
 
-    
+
 
 }
 
