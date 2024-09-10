@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,36 +27,34 @@ namespace DataGrid.Persistence.Repositories
             IQueryable<Product> products = _context.Products;
 
             // Search
-            if (query.Search != null && query.Search.Any())
+            if (query.Search != null)
             {
-                foreach (var searchObject in query.Search)
-                {
-                    if (searchObject.Value != null)
-                    {
-                        var propertyType = typeof(Product).GetProperty(searchObject.Key)?.PropertyType;
-                        products = products.SearchPropertyTypeAndValue(propertyType, searchObject.Key, searchObject.Value);
-                    }
-                }
+                // Get the properties of SearchProductViewModel
+                var searchProperties = query.Search.GetType().GetProperties().Where(p => p.GetValue(query.Search) != null).ToList();
+                products = products.Search(query.Search, searchProperties);
             }
 
-            // sort 
-            if (query.Sort != null && query.Sort.Any())
-            {
-                foreach (var sortObject in query.Sort)
-                {
-                    products = products.OrderByProperty(sortObject.Key, sortObject.Value);
-                }
-            }
-
+            //// sort 
+            //if (query.Sort != null && query.Sort.Any())
+            //{
+            //    foreach (var sortObject in query.Sort)
+            //    {
+            //        products = products.OrderByProperty(sortObject.Key, sortObject.Value);
+            //    }
+            //}
 
             // paging
             products = products
                 .Skip((query.PageNumber - 1) * query.PageSize)
                 .Take(query.PageSize);
-            // Excute the Query!!
+            // Execute the Query!!
             return await products.ToListAsync();
         }
 
     }
+
+
+    
+
 }
 
