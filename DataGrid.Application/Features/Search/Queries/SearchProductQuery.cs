@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace DataGrid.Application.Features.Search.Queries
 {
-    public class SearchProductQuery : IRequest<ApiResult<SearchProductViewModel>>
+    public class SearchProductQuery<T> : IRequest<ApiResult<T>> where T : class
     {
-        public SearchProductViewModel Search { get; set; }
+        public T Search { get; set; }
         public SortObject Sort { get; set; }
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;

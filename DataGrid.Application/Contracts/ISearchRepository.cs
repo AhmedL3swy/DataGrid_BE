@@ -9,6 +9,7 @@ namespace DataGrid.Application.Contracts
 {
     public interface ISearchRepository<T> where T : class
     {
-        Task<List<T>> SearchAsync(SearchProductQuery query);
+        Task<List<T>> SearchAsync(SearchProductQuery<T> query);
     }
+
 }

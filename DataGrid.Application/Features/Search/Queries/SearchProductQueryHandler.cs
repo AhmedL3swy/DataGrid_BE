@@ -1,42 +1,39 @@
 ﻿using AutoMapper;
 using DataGrid.Application.Contracts;
+using DataGrid.Application.Features.Search.Queries;
 using DataGrid.Application.Shared.Models;
 using DataGrid.Domain;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DataGrid.Application.Features.Search.Queries
+public class SearchQueryHandler<T> : IRequestHandler<SearchProductQuery<T>, ApiResult<T>>
+    where T : class
 {
-    public class SearchProductQueryHandler : IRequestHandler<SearchProductQuery, ApiResult<SearchProductViewModel>>
+    private readonly ISearchRepository<T> _searchRepository;
+    private readonly IMapper _mapper;
+
+    public SearchQueryHandler(ISearchRepository<T> searchRepository, IMapper mapper)
     {
-        private readonly ISearchRepository<Product> _searchRepository;
-        private readonly IMapper _mapper;
+        _searchRepository = searchRepository;
+        _mapper = mapper;
+    }
 
-        public SearchProductQueryHandler(ISearchRepository<Product> searchRepository, IMapper mapper)
+    public async Task<ApiResult<T>> Handle(SearchProductQuery<T> request, CancellationToken cancellationToken)
+    {
+        // Fetch items from the repository
+        var items = await _searchRepository.SearchAsync(request);
+
+        // Map entities to view models
+        var mappedItems = _mapper.Map<List<T>>(items);
+
+        // Create and return ApiResult
+        var apiResult = new ApiResult<T>
         {
-            _searchRepository = searchRepository;
-            _mapper = mapper;
-        }
-        public async Task<ApiResult<SearchProductViewModel>> Handle(SearchProductQuery request, CancellationToken cancellationToken)
-        {
-            var products = await _searchRepository.SearchAsync(request);
-            var count = products.Count();
-            var searchProductViewModel = _mapper.Map<List<SearchProductViewModel>>(products);
-            var apiResult = new ApiResult<SearchProductViewModel>
-            {
-                Data = searchProductViewModel,
-                Total = count,
-                PageIndex= request.PageNumber,
-                PageSize=request.PageSize
-            };
+            Data = mappedItems,
+            Total = mappedItems.Count, // Assuming the count is the same for mapped items
+            PageIndex = request.PageNumber,
+            PageSize = request.PageSize
+        };
 
-            return apiResult;
-        }
-
-
+        return apiResult;
     }
 }

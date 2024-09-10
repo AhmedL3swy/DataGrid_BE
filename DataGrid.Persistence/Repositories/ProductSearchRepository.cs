@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DataGrid.Persistence.Repositories
 {
-    internal class ProductSearchRepository : ISearchRepository<Product>
+    internal class ProductSearchRepository<T> : ISearchRepository<T> where T : class
     {
         private readonly ProductDbContext _context;
         public ProductSearchRepository(
@@ -21,34 +21,31 @@ namespace DataGrid.Persistence.Repositories
         {
             _context = context;
         }
-        public async Task<List<Product>> SearchAsync(SearchProductQuery query)
+        public async Task<List<T>> SearchAsync(SearchProductQuery<T> query)
         {
-            // init Query
-            IQueryable<Product> products = _context.Products;
+            IQueryable<T> items = _context.Set<T>();
 
             // Search
             if (query.Search != null)
             {
-                // Get the properties of SearchProductViewModel
                 var searchProperties = query.Search.GetType().GetProperties().Where(p => p.GetValue(query.Search) != null).ToList();
-                products = products.Search(query.Search, searchProperties);
+                items = items.Search(query.Search, searchProperties);
             }
 
-            // sort 
+            // Sort
             if (query.Sort != null && !string.IsNullOrEmpty(query.Sort.Field))
             {
-                var sortProperty = typeof(Product).GetProperty(query.Sort.Field);
+                var sortProperty = typeof(T).GetProperty(query.Sort.Field);
                 if (sortProperty != null)
                 {
-                    products = products.Sort(query.Sort);
+                    items = items.Sort(query.Sort);
                 }
             }
 
-            // paging
-            products = products.Paging(query.PageNumber, query.PageSize);
+            // Paging
+            items = items.Paging(query.PageNumber, query.PageSize);
 
-            // Execute the Query!!
-            return await products.ToListAsync();
+            return await items.ToListAsync();
         }
 
     }
