@@ -24,31 +24,31 @@ namespace DataGrid.Persistence
                 {
                     Id = 1,
                     Name = "Product 1",
-                    ar_Name = "منتج 1",
+                    ArName = "منتج 1",
                     Description = "Description 1",
-                    ar_Description = "وصف 1",
+                    ArDescription = "وصف 1",
                     Price = 100,
-                    stock = 50
+                    Stock = 50
                 },
                 new Product
                 {
                     Id = 2,
                     Name = "Product 2",
-                    ar_Name = "منتج 2",
+                    ArName = "منتج 2",
                     Description = "Description 2",
-                    ar_Description = "وصف 2",
+                    ArDescription = "وصف 2",
                     Price = 200,
-                    stock = 100
+                    Stock = 100
                 },
                 new Product
                 {
                     Id = 3,
                     Name = "Product 3",
-                    ar_Name = "منتج 3",
+                    ArName = "منتج 3",
                     Description = "Description 3",
-                    ar_Description = "وصف 3",
+                    ArDescription = "وصف 3",
                     Price = 300,
-                    stock = 20
+                    Stock = 20
                 }
             );
         }

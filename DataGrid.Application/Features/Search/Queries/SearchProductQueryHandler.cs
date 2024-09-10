@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DataGrid.Application.Contracts;
+using DataGrid.Application.Shared;
 using DataGrid.Application.Shared.Models;
 using DataGrid.Domain;
 using MediatR;
@@ -11,17 +12,17 @@ using System.Threading.Tasks;
 
 namespace DataGrid.Application.Features.Search.Queries
 {
-    public class SearchProductQueryHandler : IRequestHandler<SearchProductQuery, ApiResult<SearchProductViewModel>>
+    public class SearchQueryHandler : IRequestHandler<SearchQuery<SearchProductViewModel>, ApiResult<SearchProductViewModel>>
     {
         private readonly ISearchRepository<Product> _searchRepository;
         private readonly IMapper _mapper;
 
-        public SearchProductQueryHandler(ISearchRepository<Product> searchRepository, IMapper mapper)
+        public SearchQueryHandler(ISearchRepository<Product> searchRepository, IMapper mapper)
         {
             _searchRepository = searchRepository;
             _mapper = mapper;
         }
-        public async Task<ApiResult<SearchProductViewModel>> Handle(SearchProductQuery request, CancellationToken cancellationToken)
+        public async Task<ApiResult<SearchProductViewModel>> Handle(SearchQuery<SearchProductViewModel> request, CancellationToken cancellationToken)
         {
             var products = await _searchRepository.SearchAsync(request);
             var count = products.Count();
@@ -30,8 +31,6 @@ namespace DataGrid.Application.Features.Search.Queries
             {
                 Data = searchProductViewModel,
                 Total = count,
-                PageIndex= request.PageNumber,
-                PageSize=request.PageSize
             };
 
             return apiResult;

@@ -1,5 +1,6 @@
 ﻿using DataGrid.Application.Contracts;
 using DataGrid.Application.Features.Search.Queries;
+using DataGrid.Application.Shared;
 using DataGrid.Domain;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -21,7 +22,7 @@ namespace DataGrid.Persistence.Repositories
         {
             _context = context;
         }
-        public async Task<List<Product>> SearchAsync(SearchProductQuery query)
+        public async Task<List<Product>> SearchAsync(SearchQuery<SearchProductViewModel> query)
         {
             // init Query
             IQueryable<Product> products = _context.Products;
@@ -35,12 +36,12 @@ namespace DataGrid.Persistence.Repositories
             }
 
             // sort 
-            if (query.Sort != null && !string.IsNullOrEmpty(query.Sort.Field))
+            if (query.SortBy != null && !string.IsNullOrEmpty(query.SortBy))
             {
-                var sortProperty = typeof(Product).GetProperty(query.Sort.Field);
+                var sortProperty = typeof(Product).GetProperty(query.SortBy);
                 if (sortProperty != null)
                 {
-                    products = products.Sort(query.Sort);
+                    products = products.Sort(query.SortBy, query.SortDirection);
                 }
             }
 
