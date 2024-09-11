@@ -13,7 +13,7 @@ namespace DataGrid.Persistence.Repositories
 {
     public static class SearchExtensions
     {
-        public static IQueryable<T> Search<T,S>(this IQueryable<T> entities, S searchObj, IEnumerable<PropertyInfo> searchProperties)
+        public static IQueryable<T> Search<T, S>(this IQueryable<T> entities, S searchObj, IEnumerable<PropertyInfo> searchProperties)
         {
             foreach (var property in searchProperties)
             {
@@ -22,27 +22,13 @@ namespace DataGrid.Persistence.Repositories
                 {
                     if (property.PropertyType == typeof(string))
                     {
+                        // Handle string properties using Contains
                         entities = entities.FilterByString(property.Name, (string)value);
                     }
-                    else if (property.PropertyType == typeof(int?))
+                    else
                     {
-                        entities = entities.FilterByInt(property.Name, (int)value);
-                    }
-                    else if (property.PropertyType == typeof(decimal))
-                    {
-                        entities = entities.FilterByDecimal(property.Name, (decimal)value);
-                    }
-                    else if (property.PropertyType == typeof(double))
-                    {
-                        entities = entities.FilterByDouble(property.Name, (double)value);
-                    }
-                    else if (property.PropertyType == typeof(DateTime))
-                    {
-                        entities = entities.FilterByDateTime(property.Name, (DateTime)value);
-                    }
-                    else if (property.PropertyType == typeof(bool))
-                    {
-                        entities = entities.FilterByBool(property.Name, (bool)value);
+                        // Handle other types using Equals
+                        entities = entities.FilterByOtherTypes(property.Name, value);
                     }
                 }
             }
@@ -50,35 +36,18 @@ namespace DataGrid.Persistence.Repositories
             return entities;
         }
 
+        // Filter by string using Contains
         public static IQueryable<T> FilterByString<T>(this IQueryable<T> entities, string propertyName, string value)
         {
             return entities.Where(e => EF.Property<string>(e, propertyName).Contains(value));
         }
 
-        public static IQueryable<T> FilterByInt<T>(this IQueryable<T> entities, string propertyName, int value)
+        // Filter by other types using Equals
+        public static IQueryable<T> FilterByOtherTypes<T>(this IQueryable<T> entities, string propertyName, object value)
         {
-            return entities.Where(e => EF.Property<int>(e, propertyName) == value);
+            return entities.Where(e => EF.Property<object>(e, propertyName).Equals(value));
         }
 
-        public static IQueryable<T> FilterByDecimal<T>(this IQueryable<T> entities, string propertyName, decimal value)
-        {
-            return entities.Where(e => EF.Property<decimal>(e, propertyName) == value);
-        }
-
-        public static IQueryable<T> FilterByDouble<T>(this IQueryable<T> entities, string propertyName, double value)
-        {
-            return entities.Where(e => EF.Property<double>(e, propertyName) == value);
-        }
-
-        public static IQueryable<T> FilterByDateTime<T>(this IQueryable<T> entities, string propertyName, DateTime value)
-        {
-            return entities.Where(e => EF.Property<DateTime>(e, propertyName) == value);
-        }
-
-        public static IQueryable<T> FilterByBool<T>(this IQueryable<T> entities, string propertyName, bool value)
-        {
-            return entities.Where(e => EF.Property<bool>(e, propertyName) == value);
-        }
 
         public static IQueryable<T> OrderByProperty<T>(this IQueryable<T> entities, string propertyName, SortDirection sortDirection)
         {
