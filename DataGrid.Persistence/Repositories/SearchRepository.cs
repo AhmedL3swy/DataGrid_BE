@@ -1,7 +1,10 @@
 ﻿using DataGrid.Application.Contracts;
 using DataGrid.Application.Shared.Models;
+using DataGrid.Domain;
 using DataGrid.Persistence.Shared.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json.Linq;
 
 namespace DataGrid.Persistence.Repositories
 {
@@ -10,8 +13,7 @@ namespace DataGrid.Persistence.Repositories
         private readonly ProductDbContext _context;
         public SearchRepository(
             ProductDbContext context
-
-            )
+        )
         {
             _context = context;
         }
@@ -19,6 +21,22 @@ namespace DataGrid.Persistence.Repositories
         {
             // init Query
             IQueryable<DbSet> products = _context.Set<DbSet>();
+
+            // Range Search
+            if (query.RangeSearch != null)
+            {
+                foreach (var rangeSearch in query.RangeSearch)
+                {
+                    var property = typeof(DbSet).GetProperty(rangeSearch.Field);
+                    if (property != null)
+                    {
+                        if (property.PropertyType == typeof(decimal))
+                        {
+                            products = products.FilterByDecimalRange(rangeSearch.Field, rangeSearch.Start, rangeSearch.End);
+                        }
+                    }
+                }
+            }
 
             // Search
             if (query.Search != null)
@@ -37,8 +55,8 @@ namespace DataGrid.Persistence.Repositories
                     products = products.Sort(query.SortBy, query.SortDirection);
                 }
             }
-            // count total records before paging
 
+            // count total records before paging
             var total = await products.CountAsync();
 
             // paging
@@ -68,7 +86,6 @@ namespace DataGrid.Persistence.Repositories
                 Total = total
             };
         }
-
     }
 
 

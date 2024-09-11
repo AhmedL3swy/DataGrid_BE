@@ -17,6 +17,7 @@ namespace DataGrid.Application.Shared.Models
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
         public string Include { get; set; }
+        public List<RangeSearch> RangeSearch { get; set; }
 
     }
 

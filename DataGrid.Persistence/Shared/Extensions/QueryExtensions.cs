@@ -1,5 +1,6 @@
 ﻿using DataGrid.Application.Shared.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace DataGrid.Persistence.Shared.Extensions
@@ -29,6 +30,10 @@ namespace DataGrid.Persistence.Shared.Extensions
             return entities;
         }
 
+
+
+
+
         // Filter by string using Contains
         public static IQueryable<T> FilterByString<T>(this IQueryable<T> entities, string propertyName, string value)
         {
@@ -40,7 +45,11 @@ namespace DataGrid.Persistence.Shared.Extensions
         {
             return entities.Where(e => EF.Property<object>(e, propertyName).Equals(value));
         }
-
+        public static IQueryable<T> FilterByDecimalRange<T>(this IQueryable<T> entities, string propertyName, decimal minValue, decimal maxValue)
+        {
+            return entities.Where(e => EF.Property<decimal>(e, propertyName) >= minValue && EF.Property<decimal>(e, propertyName) <= maxValue);
+        }
+      
 
         public static IQueryable<T> OrderByProperty<T>(this IQueryable<T> entities, string propertyName, SortDirection sortDirection)
         {
