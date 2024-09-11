@@ -12,22 +12,22 @@ using System.Threading.Tasks;
 
 namespace DataGrid.Application.Features.Search.Queries
 {
-    public class SearchQueryHandler: IRequestHandler<SearchQuery<SearchProductViewModel>, ApiResult<SearchProductViewModel>>
+    public class SearchQueryHandler<T, S> : IRequestHandler<SearchQuery<S>, ApiResult<S>> where T : class where S : class
     {
-        private readonly ISearchRepository<Product, SearchProductViewModel> _searchRepository;
+        private readonly ISearchRepository<T, S> _searchRepository;
         private readonly IMapper _mapper;
 
-        public SearchQueryHandler(ISearchRepository<Product, SearchProductViewModel> searchRepository, IMapper mapper)
+        public SearchQueryHandler(ISearchRepository<T, S> searchRepository, IMapper mapper)
         {
             _searchRepository = searchRepository;
             _mapper = mapper;
         }
-        public async Task<ApiResult<SearchProductViewModel>> Handle(SearchQuery<SearchProductViewModel> request, CancellationToken cancellationToken)
+        public async Task<ApiResult<S>> Handle(SearchQuery<S> request, CancellationToken cancellationToken)
         {
             var products = await _searchRepository.SearchAsync(request);
             var count = products.Count();
-            var searchProductViewModel = _mapper.Map<List<SearchProductViewModel>>(products);
-            var apiResult = new ApiResult<SearchProductViewModel>
+            var searchProductViewModel = _mapper.Map<List<S>>(products);
+            var apiResult = new ApiResult<S>
             {
                 Data = searchProductViewModel,
                 Total = count,
