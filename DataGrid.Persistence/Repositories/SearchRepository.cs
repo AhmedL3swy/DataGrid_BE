@@ -32,8 +32,21 @@ namespace DataGrid.Persistence.Repositories
                     {
                         if (property.PropertyType == typeof(decimal))
                         {
-                            products = products.FilterByDecimalRange(rangeSearch.Field, rangeSearch.Start, rangeSearch.End);
+
+                            products = products.FilterByRange(rangeSearch.Field, rangeSearch.Start, rangeSearch.End);
                         }
+                        if (property.PropertyType == typeof(int))
+                        {
+
+                            products = products.FilterByRange(rangeSearch.Field, rangeSearch.StartInt, rangeSearch.EndInt);
+                        }
+                        if (property.PropertyType == typeof(DateTime))
+                        {
+
+                            products = products.FilterByRange(rangeSearch.Field, rangeSearch.StartDateTime, rangeSearch.EndDateTime);
+                        }
+
+
                     }
                 }
             }

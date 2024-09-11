@@ -45,11 +45,15 @@ namespace DataGrid.Persistence.Shared.Extensions
         {
             return entities.Where(e => EF.Property<object>(e, propertyName).Equals(value));
         }
-        public static IQueryable<T> FilterByDecimalRange<T>(this IQueryable<T> entities, string propertyName, decimal minValue, decimal maxValue)
+        public static IQueryable<T> FilterByRange<T, TProperty>(this IQueryable<T> entities, string propertyName, TProperty minValue, TProperty maxValue)
+    where TProperty : IComparable<TProperty>
         {
-            return entities.Where(e => EF.Property<decimal>(e, propertyName) >= minValue && EF.Property<decimal>(e, propertyName) <= maxValue);
+            return entities.Where(e =>
+                EF.Property<TProperty>(e, propertyName).CompareTo(minValue) >= 0 &&
+                EF.Property<TProperty>(e, propertyName).CompareTo(maxValue) <= 0);
         }
-      
+
+
 
         public static IQueryable<T> OrderByProperty<T>(this IQueryable<T> entities, string propertyName, SortDirection sortDirection)
         {
