@@ -45,7 +45,11 @@ namespace DataGrid.Persistence.Repositories
 
                             products = products.FilterByRange(rangeSearch.Field, rangeSearch.StartDateTime, rangeSearch.EndDateTime);
                         }
+                        if (property.PropertyType == typeof(DateOnly))
+                        {
 
+                            products = products.FilterByRange(rangeSearch.Field, rangeSearch.ParsedStartDate, rangeSearch.ParsedEndDate);
+                        }
 
                     }
                 }
