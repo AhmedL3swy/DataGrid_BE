@@ -8,62 +8,74 @@ namespace DataGrid.Application.Shared.Models
         public string Field { get; set; }
 
         // Input properties
-        public decimal Start { get; set; }
-        public decimal End { get; set; }
+        public string start;
+        public string Start
+        {
+            get => start;
+            set
+            {
+                start = value;
+                ParseValues();
+            }
+        }
+        public string end;
+        public string End
+        {
+            get => end;
+            set
+            {
+                end = value;
+                ParseValues();
+            }
+        }
 
         [JsonIgnore]
-        public int StartInt => (int)Start; 
+        public decimal StartDecimal { get; private set; }
         [JsonIgnore]
-        public int EndInt => (int)End;     
+        public decimal EndDecimal { get; private set; }
+
+        [JsonIgnore]
+        public int StartInt { get; private set; }
+        [JsonIgnore]
+        public int EndInt { get; private set; }
+
+        [JsonIgnore]
+        public DateOnly StartDateOnly { get; private set; }
+        [JsonIgnore]
+        public DateOnly EndDateOnly { get; private set; }
 
         [JsonIgnore]
         public DateTime StartDateTime { get; private set; }
         [JsonIgnore]
         public DateTime EndDateTime { get; private set; }
 
-        private string _startDate;
-        private string _endDate;
 
-        public string StartDate
+
+        private void ParseValues()
         {
-            get => _startDate;
-            set
+
+            if (decimal.TryParse(Start, out decimal parsedStart))
             {
-                _startDate = value;
-                ParseStartDate();
+                StartDecimal = parsedStart;
+                StartInt = (int)parsedStart;
             }
-        }
 
-        public string EndDate
-        {
-            get => _endDate;
-            set
+            if (decimal.TryParse(End, out decimal parsedEnd))
             {
-                _endDate = value;
-                ParseEndDate();
+                EndDecimal = parsedEnd;
+                EndInt = (int)parsedEnd;
             }
-        }
 
-        [JsonIgnore]
-        public DateOnly ParsedStartDate { get; private set; }
-        [JsonIgnore]
-        public DateOnly ParsedEndDate { get; private set; }
-
-        private void ParseStartDate()
-        {
-            if (DateOnly.TryParse(_startDate, out DateOnly parsedDate))
+            if (DateOnly.TryParse(Start, out DateOnly parsedStartDateOnly))
             {
-                ParsedStartDate = parsedDate;
-                StartDateTime = parsedDate.ToDateTime(new TimeOnly(0, 0));
+                StartDateOnly = parsedStartDateOnly;
+                StartDateTime = parsedStartDateOnly.ToDateTime(new TimeOnly(0, 0));
             }
-        }
 
-        private void ParseEndDate()
-        {
-            if (DateOnly.TryParse(_endDate, out DateOnly parsedDate))
+            if (DateOnly.TryParse(End, out DateOnly parsedEndDateOnly))
             {
-                ParsedEndDate = parsedDate;
-                EndDateTime = parsedDate.ToDateTime(new TimeOnly(0, 0));
+                EndDateOnly = parsedEndDateOnly;
+                EndDateTime = parsedEndDateOnly.ToDateTime(new TimeOnly(23, 59));
             }
         }
     }

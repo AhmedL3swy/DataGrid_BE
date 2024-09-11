@@ -30,15 +30,15 @@ namespace DataGrid.Persistence.Repositories
                     var property = typeof(DbSet).GetProperty(rangeSearch.Field);
                     if (property != null)
                     {
-                        if (property.PropertyType == typeof(decimal))
-                        {
-
-                            products = products.FilterByRange(rangeSearch.Field, rangeSearch.Start, rangeSearch.End);
-                        }
                         if (property.PropertyType == typeof(int))
                         {
 
                             products = products.FilterByRange(rangeSearch.Field, rangeSearch.StartInt, rangeSearch.EndInt);
+                        }
+                        if (property.PropertyType == typeof(decimal))
+                        {
+
+                            products = products.FilterByRange(rangeSearch.Field, rangeSearch.StartDecimal, rangeSearch.EndDecimal);
                         }
                         if (property.PropertyType == typeof(DateTime))
                         {
@@ -48,7 +48,7 @@ namespace DataGrid.Persistence.Repositories
                         if (property.PropertyType == typeof(DateOnly))
                         {
 
-                            products = products.FilterByRange(rangeSearch.Field, rangeSearch.ParsedStartDate, rangeSearch.ParsedEndDate);
+                            products = products.FilterByRange(rangeSearch.Field, rangeSearch.StartDateOnly, rangeSearch.EndDateOnly);
                         }
 
                     }
