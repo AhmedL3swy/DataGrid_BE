@@ -4,7 +4,7 @@ using DataGrid.Domain;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using DataGrid.Application.Features.Search.SearchRequestModels;
+using DataGrid.Application.Features.Search.SearchRequestModels.Product;
 
 namespace DataGrid.Application
 {

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DataGrid.Domain;
-using DataGrid.Application.Features.Search.SearchRequestModels;
+using DataGrid.Application.Features.Search.SearchRequestModels.Product;
 
 namespace DataGrid.Application.Profiles
 {
@@ -8,7 +8,11 @@ namespace DataGrid.Application.Profiles
     {
         public AutoMapperProfile()
         {
-            CreateMap<Product, SearchProduct>().ReverseMap();
+
+            CreateMap<Product, SearchProductResultDto>()
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
+                .ForMember(dest => dest.CategoryArName, opt => opt.MapFrom(src => src.Category.ArName));
+
         }
 
     }

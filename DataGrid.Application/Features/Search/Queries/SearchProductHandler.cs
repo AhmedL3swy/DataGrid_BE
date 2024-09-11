@@ -18,15 +18,8 @@ namespace DataGrid.Application.Features.Search.Queries
         public async Task<SearchResult<DbSet>> Handle(SearchQuery<DbSet, SearchObject> request, CancellationToken cancellationToken)
         {
             var products = await _searchRepository.SearchAsync(request);
-            var count = products.Count();
-            // var searchProductViewModel = _mapper.Map<List<SearchObject>>(products);
-            var apiResult = new SearchResult<DbSet>
-            {
-                Data = products,
-                Total = count,
-            };
 
-            return apiResult;
+            return products;
         }
 
 

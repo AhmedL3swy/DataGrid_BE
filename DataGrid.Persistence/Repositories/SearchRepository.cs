@@ -15,7 +15,7 @@ namespace DataGrid.Persistence.Repositories
         {
             _context = context;
         }
-        public async Task<List<DbSet>> SearchAsync(SearchQuery<DbSet,SearchObj> query)
+        public async Task<SearchResult<DbSet>> SearchAsync(SearchQuery<DbSet, SearchObj> query)
         {
             // init Query
             IQueryable<DbSet> products = _context.Set<DbSet>();
@@ -37,12 +37,36 @@ namespace DataGrid.Persistence.Repositories
                     products = products.Sort(query.SortBy, query.SortDirection);
                 }
             }
+            // count total records before paging
+
+            var total = await products.CountAsync();
 
             // paging
             products = products.Paging(query.PageNumber, query.PageSize);
 
+            // Include if only its a property
+            if (query.Include != null)
+            {
+                var Includes = query.Include.Split(',');
+
+                foreach (var include in Includes)
+                {
+                    var includeProperty = typeof(DbSet).GetProperty(include);
+                    if (includeProperty != null)
+                    {
+                        products = products.Include(include);
+                    }
+                }
+            }
+
             // Execute the Query!!
-            return await products.ToListAsync();
+            var result = await products.ToListAsync();
+
+            return new SearchResult<DbSet>
+            {
+                Data = result,
+                Total = total
+            };
         }
 
     }

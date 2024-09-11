@@ -11,6 +11,8 @@ namespace DataGrid.Persistence
 
         public DbSet<Product> Products { get; set; }
 
+        public DbSet<Category> Categories { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>().Property(p => p.Price).HasColumnType("decimal(18,2)");
@@ -23,7 +25,8 @@ namespace DataGrid.Persistence
                     Description = "Description 1",
                     ArDescription = "وصف 1",
                     Price = 100,
-                    Stock = 50
+                    Stock = 50,
+                    CategoryId = 1
                 },
                 new Product
                 {
@@ -33,7 +36,8 @@ namespace DataGrid.Persistence
                     Description = "Description 2",
                     ArDescription = "وصف 2",
                     Price = 200,
-                    Stock = 100
+                    Stock = 100,
+                    CategoryId = 2
                 },
                 new Product
                 {
@@ -43,7 +47,28 @@ namespace DataGrid.Persistence
                     Description = "Description 3",
                     ArDescription = "وصف 3",
                     Price = 300,
-                    Stock = 20
+                    Stock = 20,
+                    CategoryId = 3
+                }
+            );
+            modelBuilder.Entity<Category>().HasData(
+                new Category
+                {
+                    Id = 1,
+                    Name = "Category 1",
+                    ArName = "الفئة 1"
+                },
+                new Category
+                {
+                    Id = 2,
+                    Name = "Category 2",
+                    ArName = "الفئة 2"
+                },
+                new Category
+                {
+                    Id = 3,
+                    Name = "Category 3",
+                    ArName = "الفئة 3"
                 }
             );
         }

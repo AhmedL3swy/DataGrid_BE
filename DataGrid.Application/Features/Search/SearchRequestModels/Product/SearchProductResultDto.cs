@@ -1,8 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace DataGrid.Domain
+namespace DataGrid.Application.Features.Search.SearchRequestModels.Product
 {
-    public class Product
+    public class SearchProductResultDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -11,15 +15,10 @@ namespace DataGrid.Domain
         public string ArDescription { get; set; }
         public decimal Price { get; set; }
         public int Stock { get; set; }
-
-        // Navigation TO Category
-        [ForeignKey("CategoryId")]
         public int CategoryId { get; set; }
-        public virtual Category Category
-        {
-            get; set;
-
-        }
+        public string CategoryName { get; set; }
+        public string CategoryArName { get; set; }
+        
 
     }
 }

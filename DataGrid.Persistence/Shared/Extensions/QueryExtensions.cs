@@ -66,10 +66,6 @@ namespace DataGrid.Persistence.Shared.Extensions
                 .Take(pageSize);
         }
 
-        public static IQueryable<T> Include<T>(this IQueryable<T> entities, string navigationProperty)
-        {
-            return entities.Include(navigationProperty);
-        }
 
     }
 }

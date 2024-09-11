@@ -1,4 +1,4 @@
-﻿namespace DataGrid.Application.Features.Search.SearchRequestModels
+﻿namespace DataGrid.Application.Features.Search.SearchRequestModels.Product
 {
     public class SearchProduct
     {
