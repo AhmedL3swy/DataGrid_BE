@@ -20,6 +20,9 @@ namespace DataGrid.Domain
             get; set;
 
         }
+        public DateTime AddedOn { get; set; }
+        public DateOnly AddedData { get; set; }
+        public TimeOnly AddedTime { get; set; }
 
     }
 }

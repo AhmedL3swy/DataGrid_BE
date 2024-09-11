@@ -46,11 +46,11 @@ namespace DataGrid.Persistence.Shared.Extensions
         {
             if (sortDirection == SortDirection.Ascending)
             {
-                return entities.OrderBy(e => EF.Property<string>(e, propertyName));
+                return entities.OrderBy(e => EF.Property<object>(e, propertyName));
             }
             else
             {
-                return entities.OrderByDescending(e => EF.Property<string>(e, propertyName));
+                return entities.OrderByDescending(e => EF.Property<object>(e, propertyName));
             }
         }
 
