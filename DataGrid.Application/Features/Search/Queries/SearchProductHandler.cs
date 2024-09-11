@@ -5,24 +5,24 @@ using MediatR;
 
 namespace DataGrid.Application.Features.Search.Queries
 {
-    public class SearchQueryHandler<T, S> : IRequestHandler<SearchQuery<S>, ApiResult<S>> where T : class where S : class
+    public class SearchQueryHandler<DbSet, SearchObject> : IRequestHandler<SearchQuery<DbSet, SearchObject>, SearchResult<DbSet>> where DbSet : class where SearchObject : class
     {
-        private readonly ISearchRepository<T, S> _searchRepository;
+        private readonly ISearchRepository<DbSet, SearchObject> _searchRepository;
         private readonly IMapper _mapper;
 
-        public SearchQueryHandler(ISearchRepository<T, S> searchRepository, IMapper mapper)
+        public SearchQueryHandler(ISearchRepository<DbSet, SearchObject> searchRepository, IMapper mapper)
         {
             _searchRepository = searchRepository;
             _mapper = mapper;
         }
-        public async Task<ApiResult<S>> Handle(SearchQuery<S> request, CancellationToken cancellationToken)
+        public async Task<SearchResult<DbSet>> Handle(SearchQuery<DbSet, SearchObject> request, CancellationToken cancellationToken)
         {
             var products = await _searchRepository.SearchAsync(request);
             var count = products.Count();
-            var searchProductViewModel = _mapper.Map<List<S>>(products);
-            var apiResult = new ApiResult<S>
+            // var searchProductViewModel = _mapper.Map<List<SearchObject>>(products);
+            var apiResult = new SearchResult<DbSet>
             {
-                Data = searchProductViewModel,
+                Data = products,
                 Total = count,
             };
 

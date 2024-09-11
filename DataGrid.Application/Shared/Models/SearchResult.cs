@@ -1,8 +1,8 @@
 ﻿namespace DataGrid.Application.Shared.Models
 {
-    public class ApiResult<T> where T : class
+    public class SearchResult<DbSet> where DbSet : class
     {
-        public List<T> Data { get; set; }
+        public List<DbSet> Data { get; set; }
         public int Total { get; set; }
 
     }

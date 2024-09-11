@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataGrid.Persistence.Repositories
 {
-    internal class SearchRepository<T, S> : ISearchRepository<T, S> where T : class where S : class
+    internal class SearchRepository<DbSet, SearchObj> : ISearchRepository<DbSet, SearchObj> where DbSet : class where SearchObj : class
     {
         private readonly ProductDbContext _context;
         public SearchRepository(
@@ -15,10 +15,10 @@ namespace DataGrid.Persistence.Repositories
         {
             _context = context;
         }
-        public async Task<List<T>> SearchAsync(SearchQuery<S> query)
+        public async Task<List<DbSet>> SearchAsync(SearchQuery<DbSet,SearchObj> query)
         {
             // init Query
-            IQueryable<T> products = _context.Set<T>();
+            IQueryable<DbSet> products = _context.Set<DbSet>();
 
             // Search
             if (query.Search != null)
@@ -31,7 +31,7 @@ namespace DataGrid.Persistence.Repositories
             // sort 
             if (query.SortBy != null && !string.IsNullOrEmpty(query.SortBy))
             {
-                var sortProperty = typeof(T).GetProperty(query.SortBy);
+                var sortProperty = typeof(DbSet).GetProperty(query.SortBy);
                 if (sortProperty != null)
                 {
                     products = products.Sort(query.SortBy, query.SortDirection);

@@ -18,7 +18,7 @@ namespace DataGrid.Application
         }
         public static IServiceCollection AddMediatorGenericHandelers(this IServiceCollection services)
         {
-            services.AddTransient(typeof(IRequestHandler<SearchQuery<SearchProduct>, ApiResult<SearchProduct>>), typeof(SearchQueryHandler<Product, SearchProduct>));
+            services.AddTransient(typeof(IRequestHandler<SearchQuery<Product, SearchProduct>, SearchResult<Product>>), typeof(SearchQueryHandler<Product, SearchProduct>));
             return services;
 
         }

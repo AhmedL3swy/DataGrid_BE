@@ -2,9 +2,9 @@
 
 namespace DataGrid.Application.Shared.Models
 {
-    public class SearchQuery<S> : IRequest<ApiResult<S>> where S : class
+    public class SearchQuery<DbSet, SearchObject> : IRequest<SearchResult<DbSet>> where SearchObject : class where DbSet : class
     {
-        public S Search { get; set; }
+        public SearchObject Search { get; set; }
 
         private string sortBy = null;
 

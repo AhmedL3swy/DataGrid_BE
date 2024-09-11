@@ -2,8 +2,8 @@
 
 namespace DataGrid.Application.Contracts
 {
-    public interface ISearchRepository<T, S> where T : class where S : class
+    public interface ISearchRepository<DbSet, SearchObject> where DbSet : class where SearchObject : class
     {
-        Task<List<T>> SearchAsync(SearchQuery<S> query);
+        Task<List<DbSet>> SearchAsync(SearchQuery<DbSet, SearchObject> query);
     }
 }
