@@ -1,17 +1,10 @@
-﻿using DataGrid.Application.Features.Search.Queries;
-using DataGrid.Application.Shared.Models;
-using DataGrid.Domain;
+﻿using DataGrid.Application.Shared.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DataGrid.Persistence.Repositories
+namespace DataGrid.Persistence.Shared.Extensions
 {
-    public static class SearchExtensions
+    public static class QueryExtensions
     {
         public static IQueryable<T> Search<T, S>(this IQueryable<T> entities, S searchObj, IEnumerable<PropertyInfo> searchProperties)
         {

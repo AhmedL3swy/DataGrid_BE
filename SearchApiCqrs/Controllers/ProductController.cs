@@ -1,11 +1,8 @@
 ﻿using DataGrid.Application.Features.Search.Queries;
 using DataGrid.Application.Shared;
+using DataGrid.Application.Shared.Models;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Text.Json;
 
 namespace DataGrid.Api.Controllers
 {

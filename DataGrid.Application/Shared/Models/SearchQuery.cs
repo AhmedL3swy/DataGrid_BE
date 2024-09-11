@@ -1,13 +1,7 @@
-﻿using DataGrid.Application.Features.Search.Queries;
-using DataGrid.Application.Shared.Models;
+﻿using DataGrid.Application.Shared.Models;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DataGrid.Application.Shared
+namespace DataGrid.Application.Shared.Models
 {
     public class SearchQuery<S> : IRequest<ApiResult<S>> where S : class
     {

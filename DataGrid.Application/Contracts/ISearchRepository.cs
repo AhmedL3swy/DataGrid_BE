@@ -1,10 +1,4 @@
-﻿using DataGrid.Application.Features.Search.Queries;
-using DataGrid.Application.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DataGrid.Application.Shared.Models;
 
 namespace DataGrid.Application.Contracts
 {

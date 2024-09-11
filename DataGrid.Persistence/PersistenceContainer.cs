@@ -1,15 +1,8 @@
 ﻿using DataGrid.Application.Contracts;
-using DataGrid.Application.Features.Search.Queries;
-using DataGrid.Domain;
 using DataGrid.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataGrid.Persistence
 {
@@ -21,7 +14,7 @@ namespace DataGrid.Persistence
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
-            services.AddScoped(typeof(ISearchRepository<,>), typeof(ProductSearchRepository<,>));
+            services.AddScoped(typeof(ISearchRepository<,>), typeof(SearchRepository<,>));
 
             return services;
         }

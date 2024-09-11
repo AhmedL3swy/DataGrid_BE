@@ -1,21 +1,14 @@
 ﻿using DataGrid.Application.Contracts;
-using DataGrid.Application.Features.Search.Queries;
-using DataGrid.Application.Shared;
-using DataGrid.Domain;
+using DataGrid.Application.Shared.Models;
+using DataGrid.Persistence.Shared.Extensions;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataGrid.Persistence.Repositories
 {
-    internal class ProductSearchRepository<T, S> : ISearchRepository<T, S> where T : class where S : class
+    internal class SearchRepository<T, S> : ISearchRepository<T, S> where T : class where S : class
     {
         private readonly ProductDbContext _context;
-        public ProductSearchRepository(
+        public SearchRepository(
             ProductDbContext context
 
             )
@@ -30,7 +23,7 @@ namespace DataGrid.Persistence.Repositories
             // Search
             if (query.Search != null)
             {
-                // Get the properties of SearchProductViewModel
+                // Get the properties of SearchViewModel
                 var searchProperties = query.Search.GetType().GetProperties().Where(p => p.GetValue(query.Search) != null).ToList();
                 products = products.Search(query.Search, searchProperties);
             }

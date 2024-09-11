@@ -2,13 +2,7 @@
 using DataGrid.Application.Contracts;
 using DataGrid.Application.Shared;
 using DataGrid.Application.Shared.Models;
-using DataGrid.Domain;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataGrid.Application.Features.Search.Queries
 {

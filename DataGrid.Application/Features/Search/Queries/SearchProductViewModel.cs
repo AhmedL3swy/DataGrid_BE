@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataGrid.Application.Features.Search.Queries
+﻿namespace DataGrid.Application.Features.Search.Queries
 {
     public class SearchProductViewModel
     {
