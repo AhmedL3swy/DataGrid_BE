@@ -1,6 +1,6 @@
-﻿namespace DataGrid.Application.Features.Search.Queries
+﻿namespace DataGrid.Application.Features.Search.SearchRequestModels
 {
-    public class SearchProductViewModel
+    public class SearchProduct
     {
         public int? Id { get; set; }
         public string Name { get; set; }

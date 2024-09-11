@@ -1,5 +1,4 @@
-﻿using DataGrid.Application.Features.Search.Queries;
-using DataGrid.Application.Shared;
+﻿using DataGrid.Application.Features.Search.SearchRequestModels;
 using DataGrid.Application.Shared.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +17,7 @@ namespace DataGrid.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Search(SearchQuery<SearchProductViewModel> query)
+        public async Task<IActionResult> Search(SearchQuery<SearchProduct> query)
         {
             var result = await _mediator.Send(query);
             return Ok(result);

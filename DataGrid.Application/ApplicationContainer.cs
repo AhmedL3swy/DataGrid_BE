@@ -1,10 +1,10 @@
 ﻿using DataGrid.Application.Features.Search.Queries;
 using DataGrid.Application.Shared.Models;
-using DataGrid.Application.Shared;
 using DataGrid.Domain;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using DataGrid.Application.Features.Search.SearchRequestModels;
 
 namespace DataGrid.Application
 {
@@ -18,7 +18,7 @@ namespace DataGrid.Application
         }
         public static IServiceCollection AddMediatorGenericHandelers(this IServiceCollection services)
         {
-            services.AddTransient(typeof(IRequestHandler<SearchQuery<SearchProductViewModel>, ApiResult<SearchProductViewModel>>), typeof(SearchQueryHandler<Product, SearchProductViewModel>));
+            services.AddTransient(typeof(IRequestHandler<SearchQuery<SearchProduct>, ApiResult<SearchProduct>>), typeof(SearchQueryHandler<Product, SearchProduct>));
             return services;
 
         }

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DataGrid.Application.Contracts;
-using DataGrid.Application.Shared;
 using DataGrid.Application.Shared.Models;
 using MediatR;
 

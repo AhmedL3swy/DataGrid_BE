@@ -1,5 +1,4 @@
-﻿using DataGrid.Application.Shared.Models;
-using MediatR;
+﻿using MediatR;
 
 namespace DataGrid.Application.Shared.Models
 {
