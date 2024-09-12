@@ -19,7 +19,7 @@ namespace DataGrid.Application.Features.Search.SearchRequestModels.Product
         public string EnCategoryName { get; set; }
         public string ArCategoryName { get; set; }
         public DateTime AddedOn { get; set; }
-        public DateOnly AddedData { get; set; }
+        public DateOnly AddedDate { get; set; }
         public TimeOnly AddedTime { get; set; }
 
 

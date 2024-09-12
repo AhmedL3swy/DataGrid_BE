@@ -31,7 +31,16 @@ namespace DataGrid.Persistence.Shared.Extensions
         }
 
 
+        // NestedSearch Extension
+        //public static IQueryable<T> NestedSearch<T>(this IQueryable<T> entities, string nestedSearch, string nestedSearchField, string nestedSearchValue)
+        //{
+        //    if (!string.IsNullOrEmpty(nestedSearch) && !string.IsNullOrEmpty(nestedSearchField) && !string.IsNullOrEmpty(nestedSearchValue))
+        //    {
+        //        entities = entities.Include(nestedSearch);
+        //    }
 
+        //    return entities;
+        //}
 
 
         // Filter by string using Contains

@@ -72,6 +72,12 @@ namespace DataGrid.Persistence.Repositories
                     products = products.Sort(query.SortBy, query.SortDirection);
                 }
             }
+            // Nested Search with NestedSearchField and NestedSearchValue
+            if (query.NestedSearch != null && query.NestedSearchValue != -1)
+            {
+                products = products.Include(query.NestedSearch)
+                     .Where(e => EF.Property<int>(e, query.NestedSearchField).Equals(query.NestedSearchValue));
+            }
 
             // count total records before paging
             var total = await products.CountAsync();
@@ -93,6 +99,9 @@ namespace DataGrid.Persistence.Repositories
                     }
                 }
             }
+
+
+
 
             // Execute the Query!!
             var result = await products.ToListAsync();

@@ -25,13 +25,13 @@ namespace DataGrid.Api.Controllers
         public async Task<IActionResult> Search(SearchQuery<Product, SearchProduct> query)
         {
             var searchResult = await _mediator.Send(query);
-            //var searchResultDto = new SearchResult<SearchProductResultDto>
-            //{
-            //    Data = _mapper.Map<List<SearchProductResultDto>>(searchResult.Data),
-            //    Total = searchResult.Total
-            //};
+            var searchResultDto = new SearchResult<SearchProductResultDto>
+            {
+                Data = _mapper.Map<List<SearchProductResultDto>>(searchResult.Data),
+                Total = searchResult.Total
+            };
 
-            return Ok(searchResult);
+            return Ok(searchResultDto);
 
         }
     }
