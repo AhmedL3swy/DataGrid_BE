@@ -10,8 +10,8 @@ namespace DataGrid.Application.Profiles
         {
 
             CreateMap<Product, SearchProductResultDto>()
-                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
-                .ForMember(dest => dest.CategoryArName, opt => opt.MapFrom(src => src.Category.ArName));
+                .ForMember(dest => dest.EnCategoryName, opt => opt.MapFrom(src => src.Category.EnName))
+                .ForMember(dest => dest.ArCategoryName, opt => opt.MapFrom(src => src.Category.ArName));
 
         }
 

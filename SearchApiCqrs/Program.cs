@@ -17,6 +17,16 @@ namespace SearchApiCqrs
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            // Allow Cors for all
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
 
             var app = builder.Build();
 
@@ -31,6 +41,7 @@ namespace SearchApiCqrs
 
             app.UseAuthorization();
 
+            app.UseCors("AllowAll");
 
             app.MapControllers();
 

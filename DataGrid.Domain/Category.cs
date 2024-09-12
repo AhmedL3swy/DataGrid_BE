@@ -9,7 +9,7 @@ namespace DataGrid.Domain
     public class Category
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string EnName { get; set; }
         public string ArName { get; set; }
 
         // Navigation TO Proudct
