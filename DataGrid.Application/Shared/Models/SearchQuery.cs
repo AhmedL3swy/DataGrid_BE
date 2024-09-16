@@ -6,6 +6,8 @@ namespace DataGrid.Application.Shared.Models
     {
         public SearchObject Search { get; set; }
 
+        public string SearchKeyword { get; set; }
+
         private string sortBy = null;
 
         public string SortBy
