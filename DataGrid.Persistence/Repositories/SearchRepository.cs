@@ -5,6 +5,8 @@ using DataGrid.Persistence.Shared.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json.Linq;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace DataGrid.Persistence.Repositories
 {
@@ -73,10 +75,26 @@ namespace DataGrid.Persistence.Repositories
                 }
             }
             // Nested Search with NestedSearchField and NestedSearchValue
-            if (query.NestedSearch != null && query.NestedSearchValue != -1)
+            if (query.NestedSearch != null)
             {
-                products = products.Include(query.NestedSearch)
-                     .Where(e => EF.Property<int>(e, query.NestedSearchField).Equals(query.NestedSearchValue));
+                foreach (var nestedSearch in query.NestedSearch)
+                {
+                    var property = typeof(DbSet).GetProperty(nestedSearch.RelativePath.Split('.')[0]);
+
+                    if (property != null)
+                    {
+
+                        int intValue;
+                        if (int.TryParse(nestedSearch.Value, out intValue))
+                        {
+                            products = products.Where(CreateNestedSearchExpression(nestedSearch.RelativePath, intValue));
+                        }
+                        products = products.Where(CreateNestedSearchExpression(nestedSearch.RelativePath, nestedSearch.Value));
+
+
+
+                    }
+                }
             }
 
             // count total records before paging
@@ -100,6 +118,25 @@ namespace DataGrid.Persistence.Repositories
                 }
             }
 
+            Expression<Func<DbSet, bool>> CreateNestedSearchExpression(string propertyName, object value)
+            {
+                var parameter = Expression.Parameter(typeof(DbSet), "p");
+                var parts = propertyName.Split('.');
+                Expression body = parameter;
+
+                foreach (var part in parts)
+                {
+                    body = Expression.Property(body, part);
+                }
+
+                var propertyType = body.Type;
+
+                var constant = Expression.Constant(Convert.ChangeType(value, propertyType));
+
+                var equals = Expression.Equal(body, constant);
+
+                return Expression.Lambda<Func<DbSet, bool>>(equals, parameter);
+            }
 
 
 

@@ -18,9 +18,7 @@ namespace DataGrid.Application.Shared.Models
         public int PageSize { get; set; } = 10;
         public string Include { get; set; }
         public List<RangeSearch> RangeSearch { get; set; }
-        public string NestedSearch { get; set; }
-        public string NestedSearchField { get; set; }
-        public int NestedSearchValue { get; set; }
+        public List<NestedSearch> NestedSearch { get; set; }
 
 
     }
