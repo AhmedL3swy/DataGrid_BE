@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DataGrid.Application.Contracts;
 using DataGrid.Application.Features.Search.SearchRequestModels.Product;
 using DataGrid.Application.Shared.Models;
 using DataGrid.Domain;
@@ -13,11 +14,14 @@ namespace DataGrid.Api.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
+        private readonly ISearchRepositoryV2<Product> _searchRepository;
 
-        public ProductController(IMediator mediator, IMapper mapper)
+
+        public ProductController(IMediator mediator, IMapper mapper, ISearchRepositoryV2<Product> searchRepository)
         {
             _mediator = mediator;
             _mapper = mapper;
+            _searchRepository = searchRepository;
         }
 
 
@@ -32,6 +36,14 @@ namespace DataGrid.Api.Controllers
             };
 
             return Ok(searchResultDto);
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SearchV2(SearchQueryV2 query)
+        {
+            var searchResult = await _searchRepository.SearchAsync(query);
+            return Ok(searchResult);
 
         }
     }

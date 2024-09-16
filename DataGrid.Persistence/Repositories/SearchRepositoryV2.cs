@@ -10,18 +10,18 @@ using System.Linq.Expressions;
 
 namespace DataGrid.Persistence.Repositories
 {
-    internal class SearchRepository<DbSet, SearchObj> : ISearchRepository<DbSet, SearchObj> where DbSet : class where SearchObj : class
+    internal class SearchRepositoryV2<DbSet> : ISearchRepositoryV2<DbSet> where DbSet : class
     {
         private readonly ProductDbContext _context;
 
-        public SearchRepository(ProductDbContext context)
+        public SearchRepositoryV2(ProductDbContext context)
         {
             _context = context;
         }
 
-        public async Task<SearchResult<DbSet>> SearchAsync(SearchQuery<DbSet, SearchObj> query)
+        public async Task<SearchResult<DbSet>> SearchAsync(SearchQueryV2 query)
         {
-            IQueryable<DbSet> products = _context.Set<DbSet>();
+            IQueryable<DbSet> entities = _context.Set<DbSet>();
 
             if (query.RangeSearch != null)
             {
@@ -32,45 +32,39 @@ namespace DataGrid.Persistence.Repositories
                     {
                         if (property.PropertyType == typeof(int))
                         {
-                            products = products.FilterByRange(rangeSearch.Field, rangeSearch.StartInt, rangeSearch.EndInt);
+                            entities = entities.FilterByRange(rangeSearch.Field, rangeSearch.StartInt, rangeSearch.EndInt);
                         }
                         else if (property.PropertyType == typeof(decimal))
                         {
-                            products = products.FilterByRange(rangeSearch.Field, rangeSearch.StartDecimal, rangeSearch.EndDecimal);
+                            entities = entities.FilterByRange(rangeSearch.Field, rangeSearch.StartDecimal, rangeSearch.EndDecimal);
                         }
                         else if (property.PropertyType == typeof(DateTime))
                         {
-                            products = products.FilterByRange(rangeSearch.Field, rangeSearch.StartDateTime, rangeSearch.EndDateTime);
+                            entities = entities.FilterByRange(rangeSearch.Field, rangeSearch.StartDateTime, rangeSearch.EndDateTime);
                         }
                         else if (property.PropertyType == typeof(DateOnly))
                         {
-                            products = products.FilterByRange(rangeSearch.Field, rangeSearch.StartDateOnly, rangeSearch.EndDateOnly);
+                            entities = entities.FilterByRange(rangeSearch.Field, rangeSearch.StartDateOnly, rangeSearch.EndDateOnly);
                         }
                     }
                 }
             }
 
-            if (query.Search != null)
-            {
-                var searchProperties = query.Search.GetType().GetProperties().Where(p => p.GetValue(query.Search) != null).ToList();
-                products = products.Search(query.Search, searchProperties);
-            }
-
             if (!string.IsNullOrEmpty(query.SearchKeyword))
             {
-                var hasArName = products.Any(e => EF.Property<string>(e, "ArName") != null);
-                var hasEnName = products.Any(e => EF.Property<string>(e, "EnName") != null);
+                var hasArName = entities.Any(e => EF.Property<string>(e, "ArName") != null);
+                var hasEnName = entities.Any(e => EF.Property<string>(e, "EnName") != null);
                 if (!hasArName && hasEnName)
                 {
-                    products = products.Where(e => EF.Property<string>(e, "EnName").Contains(query.SearchKeyword));
+                    entities = entities.Where(e => EF.Property<string>(e, "EnName").Contains(query.SearchKeyword));
                 }
                 else if (!hasEnName && hasArName)
                 {
-                    products = products.Where(e => EF.Property<string>(e, "ArName").Contains(query.SearchKeyword));
+                    entities = entities.Where(e => EF.Property<string>(e, "ArName").Contains(query.SearchKeyword));
                 }
                 else if (hasArName && hasEnName)
                 {
-                    products = products.Where(e => EF.Property<string>(e, "ArName").Contains(query.SearchKeyword) || EF.Property<string>(e, "EnName").Contains(query.SearchKeyword));
+                    entities = entities.Where(e => EF.Property<string>(e, "ArName").Contains(query.SearchKeyword) || EF.Property<string>(e, "EnName").Contains(query.SearchKeyword));
                 }
             }
 
@@ -79,7 +73,7 @@ namespace DataGrid.Persistence.Repositories
                 var sortProperty = typeof(DbSet).GetProperty(query.SortBy);
                 if (sortProperty != null)
                 {
-                    products = products.Sort(query.SortBy, query.SortDirection);
+                    entities = entities.Sort(query.SortBy, query.SortDirection);
                 }
             }
 
@@ -93,9 +87,9 @@ namespace DataGrid.Persistence.Repositories
                     {
                         if (int.TryParse(nestedSearch.Value, out int intValue))
                         {
-                            products = products.Where(CreateNestedSearchExpression(nestedSearch.RelativePath, intValue));
+                            entities = entities.Where(CreateNestedSearchExpression(nestedSearch.RelativePath, intValue));
                         }
-                        products = products.Where(CreateNestedSearchExpression(nestedSearch.RelativePath, nestedSearch.Value));
+                        entities = entities.Where(CreateNestedSearchExpression(nestedSearch.RelativePath, nestedSearch.Value));
                     }
                 }
             }
@@ -103,9 +97,9 @@ namespace DataGrid.Persistence.Repositories
 
 
 
-            var total = await products.CountAsync();
+            var total = await entities.CountAsync();
 
-            products = products.Paging(query.PageNumber, query.PageSize);
+            entities = entities.Paging(query.PageNumber, query.PageSize);
 
             if (!string.IsNullOrEmpty(query.Include))
             {
@@ -116,7 +110,7 @@ namespace DataGrid.Persistence.Repositories
                     var includeProperty = typeof(DbSet).GetProperty(include);
                     if (includeProperty != null)
                     {
-                        products = products.Include(include);
+                        entities = entities.Include(include);
                     }
                 }
             }
@@ -139,7 +133,7 @@ namespace DataGrid.Persistence.Repositories
                 return Expression.Lambda<Func<DbSet, bool>>(equals, parameter);
             }
 
-            var result = await products.ToListAsync();
+            var result = await entities.ToListAsync();
 
             return new SearchResult<DbSet>
             {

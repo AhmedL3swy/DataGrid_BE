@@ -15,6 +15,7 @@ namespace DataGrid.Persistence
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddScoped(typeof(ISearchRepository<,>), typeof(SearchRepository<,>));
+            services.AddScoped(typeof(ISearchRepositoryV2<>), typeof(SearchRepositoryV2<>));
 
             return services;
         }
