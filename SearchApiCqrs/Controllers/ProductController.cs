@@ -40,11 +40,23 @@ namespace DataGrid.Api.Controllers
         //}
 
         [HttpPost]
-        public async Task<IActionResult> SearchV2(SearchQueryV2 query)
+        public async Task<IActionResult> SearchV2(SearchQueryV2 query) // All is Exposed to Front End
         {
             var searchResult = await _searchRepository.SearchAsync(query);
             return Ok(searchResult);
 
+        }
+        [HttpPost]
+        public async Task<IActionResult> SearchV3(ProductSearchDTO query)
+        {
+            query.Include = "Category";
+            var searchResult = await _searchRepository.SearchAsync(query);
+            var searchResultDto = new SearchResult<SearchProductResultDto>
+            {
+                Data = _mapper.Map<List<SearchProductResultDto>>(searchResult.Data),
+                Total = searchResult.Total
+            };
+            return Ok(searchResultDto);
         }
     }
 

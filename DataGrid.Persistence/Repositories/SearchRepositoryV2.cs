@@ -18,7 +18,7 @@ namespace DataGrid.Persistence.Repositories
 
         public async Task<SearchResult<DbSet>> SearchAsync(SearchQueryV2 query)
         {
-            IQueryable<DbSet> entities = _context.Set<DbSet>();
+            IQueryable<DbSet> entities = _context.Set<DbSet>().AsNoTracking();
 
             // Apply Keyword Search
             entities = entities.ApplyKeywordSearch(query.SearchByKeyword);

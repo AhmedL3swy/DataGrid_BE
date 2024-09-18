@@ -45,7 +45,7 @@ namespace DataGrid.Persistence.Shared.Extensions
                         var containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
                         var containsExpression = Expression.Call(propertyExpression, containsMethod, keywordConstant);
 
-                        // Combine multiple field searches with OR
+                        // Combine multiple field searches with OR ||
                         keywordExpression = keywordExpression == null
                             ? containsExpression
                             : Expression.OrElse(keywordExpression, containsExpression);
