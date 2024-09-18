@@ -7,10 +7,24 @@ using System.Threading.Tasks;
 
 namespace DataGrid.Application.Shared.Models
 {
+    /// <summary>
+    /// Represents a search operation by keyword.
+    /// </summary>
     public class SearchByKeyword
     {
-        public string Fields { get; set; } // Fields to search separated by comma
+        /// <summary>
+        /// Gets or sets the comma-separated list of fields to search in will do "OR" search include both Result Set.
+        /// </summary>
+        public string Fields { get; set; }
+
+        /// <summary>
+        /// Gets or sets the keyword(Value) to search for.
+        /// </summary>
         public string Keyword { get; set; }
+
+        /// <summary>
+        /// Gets the list of fields as a collection of strings.
+        /// </summary>
         [JsonIgnore]
         public List<string> FieldList
         {

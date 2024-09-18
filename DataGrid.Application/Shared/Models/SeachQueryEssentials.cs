@@ -2,13 +2,11 @@
 
 namespace DataGrid.Application.Shared.Models
 {
+    /// <summary>
+    /// Represents the essential properties for a search query.
+    /// </summary>
     public class SeachQueryEssentials
     {
-        public string SortBy { get; set; }
-        public SortDirection SortDirection { get; set; } = SortDirection.Ascending;
-        public int PageNumber { get; set; } = 1;
-        public int PageSize { get; set; } = 10;
-        [JsonIgnore]
-        public string Include { get; set; }
+        
     }
 }

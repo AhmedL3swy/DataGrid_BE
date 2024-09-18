@@ -12,8 +12,16 @@ namespace DataGrid.Persistence.Shared.Extensions
 
     public static class SearchExpressionExtensions
     {
+        /// <summary>
+        /// Applies keyword search to the query based on the provided search criteria.
+        /// </summary>
+        /// <typeparam name="DbSet">The type of the DbSet.</typeparam>
+        /// <param name="query">The query to apply the keyword search to.</param>
+        /// <param name="searchByKeywords">The list of search criteria.</param>
+        /// <returns>The modified query with the keyword search applied.</returns>
         public static IQueryable<DbSet> ApplyKeywordSearch<DbSet>(this IQueryable<DbSet> query, List<SearchByKeyword> searchByKeywords)
         {
+            // Check if search criteria is provided
             if (searchByKeywords == null || !searchByKeywords.Any())
             {
                 return query;
@@ -104,8 +112,16 @@ namespace DataGrid.Persistence.Shared.Extensions
             return query;
         }
 
+        /// <summary>
+        /// Applies range search to the query based on the provided search criteria.
+        /// </summary>
+        /// <typeparam name="DbSet">The type of the DbSet.</typeparam>
+        /// <param name="entities">The query to apply the range search to.</param>
+        /// <param name="rangeSearches">The list of range search criteria.</param>
+        /// <returns>The modified query with the range search applied.</returns>
         public static IQueryable<DbSet> ApplyRangeSearch<DbSet>(this IQueryable<DbSet> entities, List<RangeSearch> rangeSearches)
         {
+            // Check if range search criteria is provided
             if (rangeSearches == null || !rangeSearches.Any()) return entities;
 
             foreach (var rangeSearch in rangeSearches)
@@ -174,8 +190,17 @@ namespace DataGrid.Persistence.Shared.Extensions
             return entities;
         }
 
+        /// <summary>
+        /// Applies sorting to the query based on the provided sort criteria.
+        /// </summary>
+        /// <typeparam name="DbSet">The type of the DbSet.</typeparam>
+        /// <param name="entities">The query to apply the sorting to.</param>
+        /// <param name="sortBy">The field to sort by.</param>
+        /// <param name="sortDirection">The sort direction.</param>
+        /// <returns>The modified query with the sorting applied.</returns>
         public static IQueryable<DbSet> ApplySorting<DbSet>(this IQueryable<DbSet> entities, string sortBy, SortDirection sortDirection)
         {
+            // Check if sortBy field is provided
             if (string.IsNullOrEmpty(sortBy)) return entities;
 
             var parameter = Expression.Parameter(typeof(DbSet), "x");
@@ -197,8 +222,16 @@ namespace DataGrid.Persistence.Shared.Extensions
             return entities.Provider.CreateQuery<DbSet>(resultExpression);
         }
 
+        /// <summary>
+        /// Applies includes to the query based on the provided include fields.
+        /// </summary>
+        /// <typeparam name="DbSet">The type of the DbSet.</typeparam>
+        /// <param name="entities">The query to apply the includes to.</param>
+        /// <param name="includeFields">The comma-separated list of include fields.</param>
+        /// <returns>The modified query with the includes applied.</returns>
         public static IQueryable<DbSet> ApplyIncludes<DbSet>(this IQueryable<DbSet> entities, string includeFields) where DbSet : class
         {
+            // Check if include fields are provided
             if (string.IsNullOrEmpty(includeFields)) return entities;
 
             foreach (var include in includeFields.Split(','))
@@ -209,6 +242,14 @@ namespace DataGrid.Persistence.Shared.Extensions
             return entities;
         }
 
+        /// <summary>
+        /// Applies paging to the query based on the provided page number and page size.
+        /// </summary>
+        /// <typeparam name="DbSet">The type of the DbSet.</typeparam>
+        /// <param name="entities">The query to apply the paging to.</param>
+        /// <param name="pageNumber">The page number.</param>
+        /// <param name="pageSize">The page size.</param>
+        /// <returns>The modified query with the paging applied.</returns>
         public static IQueryable<DbSet> ApplyPaging<DbSet>(this IQueryable<DbSet> entities, int pageNumber, int pageSize)
         {
             return entities.Skip((pageNumber - 1) * pageSize).Take(pageSize);
